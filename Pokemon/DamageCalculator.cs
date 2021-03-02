@@ -71,7 +71,7 @@ public static class DamageCalculator
 
             value = Math.Floor(value * F1);
             value = Math.Floor(value * CriticalHitModifier);
-            value = Math.Floor(value * ItemModifier);
+            value = Math.Floor(value *ItemModifier);
             value = Math.Floor(value * Testing.x.roll);
             value = Math.Floor(value / 100);
             value = Math.Floor(value * TypeUtility.GetSTABMultiplier(Move, Attacker));
@@ -114,6 +114,11 @@ public static class DamageCalculator
             {
                 WeatherModifier = 1.5;
             }
+
+            if (attackType == PokemonType.Water)
+            {
+                WeatherModifier = 0.5;
+            }
         }
 
         if (GetWeather() == Weather.Rain)
@@ -121,6 +126,11 @@ public static class DamageCalculator
             if (attackType == PokemonType.Water)
             {
                 WeatherModifier = 1.5;
+            }
+
+            if (attackType == PokemonType.Fire)
+            {
+                WeatherModifier = 0.5;
             }
         }
     }
