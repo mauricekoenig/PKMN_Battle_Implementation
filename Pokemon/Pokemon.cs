@@ -21,5 +21,8 @@ public class Pokemon : ScriptableObject
     public int SpecialAttack;
     public int SpecialDefense;
     public int Speed;
+
+    [Space]
+    public PokemonStatus pokemonStatus;
 }
 
