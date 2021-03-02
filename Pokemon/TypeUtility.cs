@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -109,6 +110,12 @@ public static class TypeUtility
             {
                 temp.Add(PokemonType.Fighting);
             }
+            if (passedType == PokemonType.Dark)
+            {
+                temp.Add(PokemonType.Fighting);
+                temp.Add(PokemonType.Fairy);
+                temp.Add(PokemonType.Bug);
+            }
         }
         if (passedType2 != PokemonType.NoType)
         {
@@ -209,6 +216,12 @@ public static class TypeUtility
             if (passedType2 == PokemonType.Normal)
             {
                 temp.Add(PokemonType.Fighting);
+            }
+            if (passedType2 == PokemonType.Dark)
+            {
+                temp.Add(PokemonType.Fighting);
+                temp.Add(PokemonType.Fairy);
+                temp.Add(PokemonType.Bug);
             }
         }
         for (int i = 0; i < temp.Count; i++)
@@ -334,6 +347,11 @@ public static class TypeUtility
             {
                 
             }
+            if (passedType == PokemonType.Dark)
+            {
+                temp.Add(PokemonType.Dark);
+                temp.Add(PokemonType.Ghost);
+            }
         }
         if (passedType2 != PokemonType.NoType)
         {
@@ -447,6 +465,11 @@ public static class TypeUtility
             {
 
             }
+            if (passedType2 == PokemonType.Dark)
+            {
+                temp.Add(PokemonType.Dark);
+                temp.Add(PokemonType.Ghost);
+            }
         }
 
         for (int i = 0; i < temp.Count; i++)
@@ -488,6 +511,10 @@ public static class TypeUtility
             {
                 temp.Add(PokemonType.Ghost);
             }
+            if (passedType == PokemonType.Dark)
+            {
+                temp.Add(PokemonType.Psychic);
+            }
         }
         if (passedType2 != PokemonType.NoType)
         {
@@ -516,6 +543,10 @@ public static class TypeUtility
             {
                 temp.Add(PokemonType.Ghost);
             }
+            if (passedType2 == PokemonType.Dark)
+            {
+                temp.Add(PokemonType.Psychic);
+            }
         }
         for (int i = 0; i < temp.Count; i++)
         {
@@ -528,18 +559,18 @@ public static class TypeUtility
         //        pokemon.resistances.Remove(temp[i]);
         //} // REMOVE RESISTANCE IF IMMUNE
     }
-    public static float GetEffectiveMultiplier (PokemonMove move, Pokemon pokemon)
+    public static float GetEffectiveMultiplier (PokemonMove move, Pokemon defender)
     {
         var incomingType = move.moveType;
         var matchingWeaknesses = new List<PokemonType>(); // übereinstimmende Schwäche
         var matchingResistances = new List<PokemonType>(); // übereinstimmende Resistenz durch Zweittyp
 
-        foreach (var element in pokemon.resistances)
+        foreach (var element in defender.resistances)
         {
             if (element == incomingType)
                 matchingResistances.Add(element);
         }
-        foreach (var element2 in pokemon.weaknesses)
+        foreach (var element2 in defender.weaknesses)
         {
             if (element2 == incomingType)
                 matchingWeaknesses.Add(element2);
@@ -571,17 +602,17 @@ public static class TypeUtility
         }
         else return 0;
     }
-    public static int GetSTABMultiplier(PokemonMove move, Pokemon pokemon)
+    public static float GetSTABMultiplier(PokemonMove move, Pokemon attacker)
     {
-        var firstType = pokemon.firstType;
-        var secondType = pokemon.secondType;
+        var firstType = attacker.firstType;
+        var secondType = attacker.secondType;
         var moveType = move.moveType;
 
         if (firstType == moveType)
-            return 2;
+            return 1.5f;
 
         else if (secondType == moveType)
-            return 2;
+            return 1.5f;
 
         else return 1;
     }
