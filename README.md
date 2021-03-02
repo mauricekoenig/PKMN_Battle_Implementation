@@ -1,4 +1,3 @@
-# UnityCode
+# Unity Components
 
-
-Dieses Repository umfasst viele Unity-Komponenten, an denen ich innerhalb der letzten Jahre gearbeitet habe.
+Hier kann man Code finden, mit dem ich mich im Verlaufe der letzten Monate / Jahre beschäftigt habe. Bitte bedenkt, dass dies lediglich ein erster Entwurf ist und all die hier aufgelisteten Codes zu hoher Wahrscheinlichkeit nach und nach editiert, bzw. angepasst werden.
