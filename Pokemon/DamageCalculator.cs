@@ -25,52 +25,53 @@ public static class DamageCalculator
 
         if (MoveCategory == PokemonMoveCategory.Physical)
         {
-            float value = 0;
+            double value = 0;
             int F1 = Burn * Reducing * WeatherBoost * OtherBoostingSources;
 
-            value = Mathf.Round(100 * 2);
-            value = Mathf.Round(value / 5);
-            value = Mathf.Round(value + 2);
-            value = Mathf.Round(value * Move.moveBasePower);
-            value = Mathf.Round(value * attacker.PhysicalAttack);
-            value = Mathf.Round(value / defender.PhysicalDefense);
-            value = Mathf.Round(value / 50);
-            value = Mathf.Round(value + 2);
+            value = 100 * 2;
+            value = Math.Floor(value / 5);
+            value = Math.Floor(value + 2);
+            value = Math.Floor(value * Move.moveBasePower);
+            value = Math.Floor(value * attacker.PhysicalAttack);
+            value = Math.Floor(value / defender.PhysicalDefense);
+            value = Math.Floor(value / 50);
+            value = Math.Floor(value + 2);
 
-            value = Mathf.Round(value * F1);
-            value = Mathf.Round(value * CriticalHit);
-            value = Mathf.Round(value * DamageBoostingItem);
-            value = Mathf.Round(value * Testing.x.roll);
-            value = Mathf.Round(value / 100);
-            value = Mathf.Round(value * TypeUtility.GetSTABMultiplier(Move, Attacker));
-            value = Mathf.Round(value * TypeUtility.GetEffectiveMultiplier(Move, Defender));
-            value = Mathf.Round(value * BerryOrExpertBelt);
-            return Mathf.RoundToInt(value);
+            value = Math.Floor(value * F1);
+            value = Math.Floor(value * CriticalHit);
+            value = Math.Floor(value * DamageBoostingItem);
+            value = Math.Floor(value * Testing.x.roll);
+            value = Math.Floor(value / 100);
+            value = Math.Floor(value * TypeUtility.GetSTABMultiplier(Move, Attacker));
+            value = Math.Floor(value * TypeUtility.GetEffectiveMultiplier(Move, Defender));
+            value = Math.Floor(value * BerryOrExpertBelt);
+            return (int)Math.Floor(value);
         }
         else if (MoveCategory == PokemonMoveCategory.Special)
         {
-            float value = 0;
-            int F1 = Burn * Reducing * WeatherBoost * OtherBoostingSources;
+            double value = 0;
+            int F1 = 1 * Reducing * WeatherBoost * OtherBoostingSources;
 
-            value = Mathf.Round(100 * 2);
-            value = Mathf.Round(value / 5);
-            value = Mathf.Round(value + 2);
-            value = Mathf.Round(value * Move.moveBasePower);
-            value = Mathf.Round(value * attacker.SpecialAttack);
-            value = Mathf.Round(value / defender.SpecialDefense);
-            value = Mathf.Round(value / 50);
-            value = Mathf.Round(value + 2);
+            value = 100 * 2;
+            value = Math.Floor(value / 5);
+            value = Math.Floor(value + 2);
+            value = Math.Floor(value * Move.moveBasePower);
+            value = Math.Floor(value * attacker.SpecialAttack);
+            value = Math.Floor(value / defender.SpecialDefense);
+            value = Math.Floor(value / 50);
+            value = Math.Floor(value + 2);
 
-            value = Mathf.Round(value * F1);
-            value = Mathf.Round(value * CriticalHit);
-            value = Mathf.Round(value * DamageBoostingItem);
-            value = Mathf.Round(value * Testing.x.roll);
-            value = Mathf.Round(value / 100);
-            value = Mathf.Round(value * TypeUtility.GetSTABMultiplier(Move, Attacker));
-            value = Mathf.Round(value * TypeUtility.GetEffectiveMultiplier(Move, Defender));
-            value = Mathf.Round(value * BerryOrExpertBelt);
-            return Mathf.RoundToInt(value);
+            value = Math.Floor(value * F1);
+            value = Math.Floor(value * CriticalHit);
+            value = Math.Floor(value * DamageBoostingItem);
+            value = Math.Floor(value * Testing.x.roll);
+            value = Math.Floor(value / 100);
+            value = Math.Floor(value * TypeUtility.GetSTABMultiplier(Move, Attacker));
+            value = Math.Floor(value * TypeUtility.GetEffectiveMultiplier(Move, Defender));
+            value = Math.Floor(value * BerryOrExpertBelt);
+            return (int)Math.Floor(value);
         }
+
         else return -1000;
     }
 }
