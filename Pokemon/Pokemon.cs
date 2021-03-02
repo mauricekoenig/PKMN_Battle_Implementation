@@ -4,12 +4,14 @@ using System.Collections.Generic;
 [CreateAssetMenu]
 public class Pokemon : ScriptableObject
 {
+    [Header("Base information")]
     public string pokemonName;
     public string pokemonDexID;
     public PokemonType firstType;
     public PokemonType secondType;
     public PokemonMove[] moves = new PokemonMove[4];
 
+    [Header("Type consequences")]
     public List<PokemonType> weaknesses = new List<PokemonType>();
     public List<PokemonType> resistances = new List<PokemonType>();
     public List<PokemonType> immunities = new List<PokemonType>();
