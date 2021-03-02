@@ -216,6 +216,7 @@ public static class TypeUtility
             pokemon.weaknesses.Add(temp[i]);
         }
     }
+    
     public static void GetResistances (Pokemon pokemon)
     {
         var passedType = pokemon.firstType;
@@ -455,6 +456,81 @@ public static class TypeUtility
         }
         Testing.x.visual = pokemon.resistances;
     }
+    
+    public static void GetImmunities (Pokemon pokemon)
+    {
+        var passedType = pokemon.firstType;
+        var passedType2 = pokemon.secondType;
+        List<PokemonType> temp = new List<PokemonType>();
+
+        if (passedType != PokemonType.NoType)
+        {
+            if (passedType == PokemonType.Fairy)
+            {
+                temp.Add(PokemonType.Dragon);
+            }
+            if (passedType == PokemonType.Steel)
+            {
+                temp.Add(PokemonType.Poison);
+            }
+            if (passedType == PokemonType.Ground)
+            {
+                temp.Add(PokemonType.Electric);
+            }
+            if (passedType == PokemonType.Flying)
+            {
+                temp.Add(PokemonType.Ground);
+            }
+            if (passedType == PokemonType.Ghost)
+            {
+                temp.Add(PokemonType.Fighting);
+                temp.Add(PokemonType.Normal);
+            }
+            if (passedType == PokemonType.Normal)
+            {
+                temp.Add(PokemonType.Ghost);
+            }
+        }
+        if (passedType2 != PokemonType.NoType)
+        {
+            if (passedType2 == PokemonType.Fairy)
+            {
+                temp.Add(PokemonType.Dragon);
+            }
+            if (passedType2 == PokemonType.Steel)
+            {
+                temp.Add(PokemonType.Poison);
+            }
+            if (passedType2 == PokemonType.Ground)
+            {
+                temp.Add(PokemonType.Electric);
+            }
+            if (passedType2 == PokemonType.Flying)
+            {
+                temp.Add(PokemonType.Ground);
+            }
+            if (passedType2 == PokemonType.Ghost)
+            {
+                temp.Add(PokemonType.Fighting);
+                temp.Add(PokemonType.Normal);
+            }
+            if (passedType2 == PokemonType.Normal)
+            {
+                temp.Add(PokemonType.Ghost);
+            }
+        }
+        for (int i = 0; i < temp.Count; i++)
+        {
+            pokemon.immunities.Add(temp[i]);
+        }
+
+        //for (int i = 0; i < temp.Count; i++)
+        //{
+        //    if (pokemon.resistances.Contains(temp[i]))
+        //        pokemon.resistances.Remove(temp[i]);
+        //} // REMOVE RESISTANCE IF IMMUNE
+    }
+    
     public static float GetEffectiveMultiplier (PokemonMove move, Pokemon pokemon)
     {
         var incomingType = move.moveType;
@@ -497,5 +573,27 @@ public static class TypeUtility
             return 2; // Simple Effective
         }
         else return 0;
+    }
+    
+    public static int GetSTABMultiplier(PokemonMove move, Pokemon pokemon)
+    {
+        var firstType = pokemon.firstType;
+        var secondType = pokemon.secondType;
+        var moveType = move.moveType;
+
+        if (firstType == moveType)
+            return 2;
+
+        else if (secondType == moveType)
+            return 2;
+
+        else return 1;
+    }
+    
+    public static void GetWholeTypeInfo (Pokemon pokemon)
+    {
+        GetResistances(pokemon);
+        GetWeaknesses(pokemon);
+        GetImmunities(pokemon);
     }
 }
