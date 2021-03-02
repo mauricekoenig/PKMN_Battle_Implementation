@@ -216,7 +216,6 @@ public static class TypeUtility
             pokemon.weaknesses.Add(temp[i]);
         }
     }
-    
     public static void GetResistances (Pokemon pokemon)
     {
         var passedType = pokemon.firstType;
@@ -456,7 +455,6 @@ public static class TypeUtility
         }
         Testing.x.visual = pokemon.resistances;
     }
-    
     public static void GetImmunities (Pokemon pokemon)
     {
         var passedType = pokemon.firstType;
@@ -530,7 +528,6 @@ public static class TypeUtility
         //        pokemon.resistances.Remove(temp[i]);
         //} // REMOVE RESISTANCE IF IMMUNE
     }
-    
     public static float GetEffectiveMultiplier (PokemonMove move, Pokemon pokemon)
     {
         var incomingType = move.moveType;
@@ -574,7 +571,6 @@ public static class TypeUtility
         }
         else return 0;
     }
-    
     public static int GetSTABMultiplier(PokemonMove move, Pokemon pokemon)
     {
         var firstType = pokemon.firstType;
@@ -589,7 +585,6 @@ public static class TypeUtility
 
         else return 1;
     }
-    
     public static void GetWholeTypeInfo (Pokemon pokemon)
     {
         GetResistances(pokemon);
