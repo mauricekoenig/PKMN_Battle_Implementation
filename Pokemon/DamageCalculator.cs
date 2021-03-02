@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class DamageCalculator
 {
@@ -9,14 +10,13 @@ public static class DamageCalculator
     public static List<IDamageReducingEffect> ClientDamageReductions = new List<IDamageReducingEffect>();
 
     #region FactorModifier
-    private const double MultiTargetModifier = 1;
-    private static double BurnModifier = 1;
-    private static double DamageReductionModifier = 1;
-    private static double WeatherModifier = 1;
-    private static double StatChargedModifier = 1;
-    private static double CriticalHitModifier = 1;
-    private static double ItemModifier = 1;
-    private static double RollModifier = 100;
+    private const double MultiTargetModifier = 1;  // fixed
+    private static double BurnModifier = 1; // In work
+    private static double DamageReductionModifier = 1; // in work
+    private static double WeatherModifier = 1; // DONE
+    private static double StatChargedModifier = 1; // in work
+    private static double CriticalHitModifier = 1; // in work
+    private static double ItemModifier = 1;  // in work
     private static double BerryOrExpBeltModifier = 1;
     #endregion
 
@@ -46,7 +46,7 @@ public static class DamageCalculator
             value = Math.Floor(value * F1);
             value = Math.Floor(value * CriticalHitModifier);
             value = Math.Floor(value * ItemModifier);
-            value = Math.Floor(value * Testing.x.roll);
+            value = Math.Floor(value * GetRoll() );
             value = Math.Floor(value / 100);
             value = Math.Floor(value * TypeUtility.GetSTABMultiplier(Move, Attacker));
             value = Math.Floor(value * TypeUtility.GetEffectiveMultiplier(Move, Defender));
@@ -71,8 +71,8 @@ public static class DamageCalculator
 
             value = Math.Floor(value * F1);
             value = Math.Floor(value * CriticalHitModifier);
-            value = Math.Floor(value *ItemModifier);
-            value = Math.Floor(value * Testing.x.roll);
+            value = Math.Floor(value * ItemModifier);
+            value = Math.Floor(value * GetRoll() );
             value = Math.Floor(value / 100);
             value = Math.Floor(value * TypeUtility.GetSTABMultiplier(Move, Attacker));
             value = Math.Floor(value * TypeUtility.GetEffectiveMultiplier(Move, Defender));
@@ -120,7 +120,6 @@ public static class DamageCalculator
                 WeatherModifier = 0.5;
             }
         }
-
         if (GetWeather() == Weather.Rain)
         {
             if (attackType == PokemonType.Water)
@@ -140,5 +139,9 @@ public static class DamageCalculator
         StatChargedModifier = 1;
         DamageReductionModifier = 1;
         BurnModifier = 1;
+    }
+    private static int GetRoll ()
+    {
+        return Random.Range(85, 101);
     }
 }
