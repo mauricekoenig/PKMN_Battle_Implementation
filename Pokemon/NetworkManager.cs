@@ -1,13 +1,16 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using ExitGames.Client.Photon;
 
 public sealed class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager x;
     public int CurrentRoomMaxSize { get; private set; }
-    public NetworkIdentity MyNetworkIdentity { get; private set; }
+    public NetworkIdentity PlayerIdentity { get; private set; }
 
     private void Awake()
     {
@@ -17,12 +20,27 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
-        TryToConnect();
+        BuildConnection();
+    }
+    private void Update()
+    {
+        if (InLobbyAndReady())
+        {
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+            {
+                CreateNewRoom();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+            {
+                PhotonNetwork.JoinRandomRoom();
+            }
+        }
     }
 
     public override void OnConnected()
     {
-        MyNetworkIdentity = NetworkIdentity.NotSet;
+        PlayerIdentity = NetworkIdentity.NotSet;
     }
     public override void OnConnectedToMaster()
     {
@@ -30,35 +48,39 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
+        PhotonNetwork.AddCallbackTarget(this);
         Debug.Log("In Lobby!");
     }
     public override void OnCreatedRoom()
     {
         CurrentRoomMaxSize = PhotonNetwork.CurrentRoom.MaxPlayers;
+        Debug.Log("OnCreatedRoom " + CurrentRoomMaxSize);
     }
     public override void OnJoinedRoom()
     {
         if (PhotonNetwork.IsMasterClient) // HostLogic
         {
-            MyNetworkIdentity = NetworkIdentity.Host;
+            PlayerIdentity = NetworkIdentity.Host;
+            Debug.Log("OnJoinedRoom: " + PlayerIdentity.ToString());
         }
 
         if (!PhotonNetwork.IsMasterClient) // Client Logic
         {
-            MyNetworkIdentity = NetworkIdentity.Client;
+            PlayerIdentity = NetworkIdentity.Client;
+            Debug.Log("OnJoinedRoom: " + PlayerIdentity.ToString());
         }
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         if (GetRoomPlayerCount() == CurrentRoomMaxSize)
         {
+            SceneManager.LoadScene("BattleScene");
             Debug.Log("Game can start.");
         }
     }
-
     public override void OnDisconnected(DisconnectCause cause)
     {
-        
+        PhotonNetwork.RemoveCallbackTarget(this);
     }
     public override void OnLeftLobby()
     {
@@ -67,7 +89,7 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         CurrentRoomMaxSize = 0;
-        MyNetworkIdentity = NetworkIdentity.NotSet;
+        PlayerIdentity = NetworkIdentity.NotSet;
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -75,18 +97,11 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Left Room. Back in lobby.");
     }
 
-    private void StartNewMatch ()
-    {
-
-    }
-    private int GetRoomPlayerCount ()
-    {
-        return PhotonNetwork.CurrentRoom.PlayerCount;
-    }
-    private void TryToConnect ()
+    private void BuildConnection ()
     {
         try
         {
+            PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.ConnectUsingSettings();
         }
 
@@ -95,5 +110,41 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log(e);
         }
 
+    }
+    private int GetRoomPlayerCount ()
+    {
+        return PhotonNetwork.CurrentRoom.PlayerCount;
+    }
+    public void CreateNewRoom ()
+    {
+        RoomOptions NewRoom = new RoomOptions
+        {
+            MaxPlayers = 2,
+            PlayerTtl = 2000,
+            IsOpen = true,
+            IsVisible = true
+        };
+
+        PhotonNetwork.CreateRoom(Guid.NewGuid().ToString(), NewRoom, TypedLobby.Default);
+
+    }
+    private bool InLobbyAndReady ()
+    {
+        if (PhotonNetwork.InLobby && !PhotonNetwork.InRoom)
+        {
+            return true;
+        }
+
+        else return false;
+    }
+    public NetworkIdentity GetPlayerIdentity ()
+    {
+        if (PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient)
+            return NetworkIdentity.Host;
+
+        else if (PhotonNetwork.InRoom && !PhotonNetwork.IsMasterClient)
+            return NetworkIdentity.Client;
+
+        else return NetworkIdentity.NotSet;
     }
 }
