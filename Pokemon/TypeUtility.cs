@@ -476,7 +476,6 @@ public static class TypeUtility
         {
             pokemon.resistances.Add(temp[i]);
         }
-        Testing.x.visual = pokemon.resistances;
     }
     public static void GetImmunities (Pokemon pokemon)
     {
