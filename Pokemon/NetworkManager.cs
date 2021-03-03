@@ -93,6 +93,7 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene(0);
         Debug.Log("Left Room. Back in lobby.");
     }
     private void BuildConnection ()
@@ -118,7 +119,7 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
         RoomOptions NewRoom = new RoomOptions
         {
             MaxPlayers = 2,
-            PlayerTtl = 2000,
+            PlayerTtl = 1000,
             IsOpen = true,
             IsVisible = true
         };
