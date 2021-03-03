@@ -48,7 +48,6 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
-        PhotonNetwork.AddCallbackTarget(this);
         Debug.Log("In Lobby!");
     }
     public override void OnCreatedRoom()
@@ -80,7 +79,7 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnDisconnected(DisconnectCause cause)
     {
-        PhotonNetwork.RemoveCallbackTarget(this);
+        
     }
     public override void OnLeftLobby()
     {
@@ -96,7 +95,6 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         Debug.Log("Left Room. Back in lobby.");
     }
-
     private void BuildConnection ()
     {
         try
