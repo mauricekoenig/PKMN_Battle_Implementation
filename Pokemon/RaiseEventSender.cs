@@ -9,6 +9,7 @@ public sealed class RaiseEventSender : MonoBehaviour
 {
     public static RaiseEventSender x;
     public byte SyncTeamEventCode { get; } = 1;
+    public byte BattleSetupEventCode { get; } = 2;
 
     private void Awake()
     {
@@ -18,10 +19,11 @@ public sealed class RaiseEventSender : MonoBehaviour
 
     public void Start()
     {
-        CallSyncTeamEvent();
+        SyncTeamEvent();
+        BattleSetupEvent();
     }
 
-    private void CallSyncTeamEvent ()
+    private void SyncTeamEvent ()
     {
         RaiseEventOptions raiseOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         string[] strings = new string[PlayerProfile.x.ActiveTeam.Count];
@@ -31,6 +33,12 @@ public sealed class RaiseEventSender : MonoBehaviour
         }
         object content = strings;
         PhotonNetwork.RaiseEvent(SyncTeamEventCode, content, raiseOptions, SendOptions.SendReliable);
+    }
+
+    private void BattleSetupEvent ()
+    {
+        RaiseEventOptions raiseOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(BattleSetupEventCode, null, raiseOptions, SendOptions.SendReliable);
     }
 
 }
