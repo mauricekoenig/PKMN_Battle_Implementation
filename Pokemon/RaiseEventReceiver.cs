@@ -4,11 +4,14 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System.Linq;
 
 public sealed class RaiseEventReceiver : MonoBehaviour, IOnEventCallback
 {
 
     public static RaiseEventReceiver x;
+    [SerializeField] private GameObject LocalModel;
+    [SerializeField] private GameObject OpponentModel;
 
     private void Awake()
     {
@@ -17,7 +20,6 @@ public sealed class RaiseEventReceiver : MonoBehaviour, IOnEventCallback
 
         PhotonNetwork.AddCallbackTarget(this);
     }
-
     public void OnEvent(EventData photonEvent)
     {
         var eventCode = photonEvent.Code;
@@ -26,27 +28,36 @@ public sealed class RaiseEventReceiver : MonoBehaviour, IOnEventCallback
         {
             ReceiveTeamSyncEvent(photonEvent);
         }
+
+        if (eventCode == 2)
+        {
+            ReceiveBattleSetupEvent(photonEvent);
+        }
     }
 
     private void ReceiveTeamSyncEvent(EventData eventObject)
     {
         string[] data = (string[])eventObject.CustomData;
-        if (NetworkManager.x.GetPlayerIdentity() == NetworkIdentity.Host)
+
+        for (int i = 0; i < data.Length; i++)
         {
-            for (int i = 0; i < data.Length; i++)
-            {
-                Debug.Log(data[i]);
-                BattleInfo.x.ClientTeamAsStrings.Add(data[i]);
-            }
+            BattleInfo.x.OtherPlayerTeam.Add(Databases.x.GetPokemon(data[i]));
         }
-        if (NetworkManager.x.GetPlayerIdentity() == NetworkIdentity.Client)
-        {
-            for (int i = 0; i < data.Length; i++)
-            {
-                Debug.Log(data[i]);
-                BattleInfo.x.HostTeamAsStrings.Add(data[i]);
-            }
-        }
+    }
+    private void ReceiveBattleSetupEvent (EventData eventObject)
+    {
+        CreatePokemonModels();
+    }
+    private void CreatePokemonModels ()
+    {
+        Vector3 localPosition = new Vector3(-3.85f, -2.11f, 0);
+        Vector3 opponentPosition = new Vector3(2.85f, -0.07f, 0);
+
+        GameObject local = Instantiate(LocalModel, localPosition, Quaternion.identity);
+        local.GetComponent<PokemonController>().HandOverInfo(PlayerProfile.x.ActiveTeam[0]);
+
+        GameObject opponent = Instantiate(OpponentModel, opponentPosition, Quaternion.identity);
+        opponent.GetComponent<PokemonController>().HandOverInfo(BattleInfo.x.OtherPlayerTeam[0]);
     }
     
 }
